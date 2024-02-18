@@ -1,8 +1,7 @@
-// src/axios.js
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: 'http://localhost:8081', // Ganti dengan URL backend Spring Anda
+    baseURL: import.meta.env.VITE_API_URL,
 });
 
 export default instance;
