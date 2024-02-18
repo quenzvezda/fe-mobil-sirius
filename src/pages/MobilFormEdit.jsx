@@ -1,15 +1,15 @@
-// src/components/MobilForm.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from '../axios.js';
+import { useParams, useNavigate } from 'react-router-dom';
 
-const MobilForm = () => {
+const EditMobilForm = () => {
     const [mobil, setMobil] = useState({
         noRangka: '',
         tahun: '',
         warna: '',
         status: '',
-        jenisMobil: '', // 'Sedan' atau 'SUV'
-        merk: '', // 'Porche' atau 'Ford'
+        jenisMobil: '',
+        merk: '',
         panjangBodi: '', // untuk Sedan
         tipeAtap: '', // untuk Sedan
         kapasitasPenumpang: '', // untuk SUV
@@ -19,66 +19,36 @@ const MobilForm = () => {
         tipeMesin: '', // untuk Ford
         kapasitasTangkiBahanBakar: '', // untuk Ford
     });
+    const { mobilId } = useParams();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchMobilData = async () => {
+            try {
+                const response = await axios.get(`/mobil/${mobilId}`);
+                setMobil(response.data);
+            } catch (error) {
+                console.error('Terjadi kesalahan saat mengambil data mobil:', error);
+            }
+        };
+
+        fetchMobilData();
+    }, [mobilId]);
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-
-        let newValue;
-        if (name === 'tahun' || name === 'panjangBodi' || name === 'kapasitasPenumpang' || name === 'groundClearance' || name === 'kecepatanMaksimal' || name === 'kapasitasTangkiBahanBakar') {
-            newValue = Number(value);
-        } else {
-            newValue = value;
-        }
-
-        if (name === 'jenisMobil') {
-            setMobil({
-                ...mobil,
-                [name]: newValue,
-                panjangBodi: '',
-                tipeAtap: '',
-                kapasitasPenumpang: '',
-                groundClearance: '',
-            });
-        } else if (name === 'merk') {
-            setMobil({
-                ...mobil,
-                [name]: newValue,
-                kecepatanMaksimal: '',
-                tipeSuspensi: '',
-                tipeMesin: '',
-                kapasitasTangkiBahanBakar: '',
-            });
-        } else {
-            setMobil({ ...mobil, [name]: newValue });
-        }
+        setMobil({ ...mobil, [name]: value });
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const data = {
-            noRangka: mobil.noRangka,
-            tahun: mobil.tahun,
-            warna: mobil.warna,
-            status: mobil.status,
-            jenisMobil: mobil.jenisMobil,
-            merk: mobil.merk,
-            panjangBodi: mobil.panjangBodi,
-            tipeAtap: mobil.tipeAtap,
-            kapasitasPenumpang: mobil.kapasitasPenumpang,
-            groundClearance: mobil.groundClearance,
-            kecepatanMaksimal: mobil.kecepatanMaksimal,
-            tipeSuspensi: mobil.tipeSuspensi,
-            tipeMesin: mobil.tipeMesin,
-            kapasitasTangkiBahanBakar: mobil.kapasitasTangkiBahanBakar,
-        };
-
         try {
-            const response = await axios.post('/mobil/new', data);
-            alert('Data mobil berhasil ditambahkan!');
-            console.log(response.data);
-            window.location = '/mobil';
+            await axios.put(`/mobil/${mobilId}`, mobil);
+            alert('Data mobil berhasil diperbarui!');
+            navigate('/mobil');
+            console.log(mobil);
         } catch (error) {
-            console.error('Terjadi kesalahan saat mengirim data:', error);
+            console.error('Terjadi kesalahan saat memperbarui data mobil:', error);
         }
     };
 
@@ -150,7 +120,7 @@ const MobilForm = () => {
                     <select
                         id="jenisMobil"
                         name="jenisMobil"
-                        value={mobil.jenisMobil}
+                        value={mobil.jenisMobil.toLowerCase()}
                         onChange={handleInputChange}
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         required
@@ -166,7 +136,7 @@ const MobilForm = () => {
                     <select
                         id="merk"
                         name="merk"
-                        value={mobil.merk}
+                        value={mobil.merk.toLowerCase()}
                         onChange={handleInputChange}
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         required
@@ -181,10 +151,11 @@ const MobilForm = () => {
             <div className="flex flex-wrap -mx-3 mb-6">
                 {/* Conditional input fields berdasarkan pilihan jenis dan merk */}
                 {/* Input fields untuk Sedan */}
-                {mobil.jenisMobil === 'sedan' && (
+                {mobil.jenisMobil === 'sedan' || mobil.jenisMobil === 'Sedan' && (
                     <>
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label htmlFor="panjangBodi" className="block mb-2 text-sm font-medium text-gray-900">Panjang Bodi</label>
+                            <label htmlFor="panjangBodi" className="block mb-2 text-sm font-medium text-gray-900">Panjang
+                                Bodi</label>
                             <input
                                 type="number"
                                 id="panjangBodi"
@@ -197,7 +168,8 @@ const MobilForm = () => {
                             />
                         </div>
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label htmlFor="tipeAtap" className="block mb-2 text-sm font-medium text-gray-900">Tipe Atap</label>
+                            <label htmlFor="tipeAtap" className="block mb-2 text-sm font-medium text-gray-900">Tipe
+                                Atap</label>
                             <input
                                 type="text"
                                 id="tipeAtap"
@@ -212,10 +184,11 @@ const MobilForm = () => {
                     </>
                 )}
                 {/* Input fields untuk SUV */}
-                {mobil.jenisMobil === 'suv' && (
+                {mobil.jenisMobil === 'suv' || mobil.jenisMobil === 'SUV' && (
                     <>
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label htmlFor="kapasitasPenumpang" className="block mb-2 text-sm font-medium text-gray-900">Kapasitas Penumpang</label>
+                            <label htmlFor="kapasitasPenumpang"
+                                   className="block mb-2 text-sm font-medium text-gray-900">Kapasitas Penumpang</label>
                             <input
                                 type="number"
                                 id="kapasitasPenumpang"
@@ -228,7 +201,8 @@ const MobilForm = () => {
                             />
                         </div>
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label htmlFor="groundClearance" className="block mb-2 text-sm font-medium text-gray-900">Ground Clearance</label>
+                            <label htmlFor="groundClearance" className="block mb-2 text-sm font-medium text-gray-900">Ground
+                                Clearance</label>
                             <input
                                 type="number"
                                 id="groundClearance"
@@ -244,10 +218,11 @@ const MobilForm = () => {
                 )}
 
                 {/* Input fields untuk Porsche */}
-                {mobil.merk === 'porche' && (
+                {mobil.merk === 'porche' || mobil.merk === 'Porche' && (
                     <>
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label htmlFor="kecepatanMaksimal" className="block mb-2 text-sm font-medium text-gray-900">Kecepatan Maksimal</label>
+                            <label htmlFor="kecepatanMaksimal" className="block mb-2 text-sm font-medium text-gray-900">Kecepatan
+                                Maksimal</label>
                             <input
                                 type="number"
                                 id="kecepatanMaksimal"
@@ -260,7 +235,8 @@ const MobilForm = () => {
                             />
                         </div>
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label htmlFor="tipeSuspensi" className="block mb-2 text-sm font-medium text-gray-900">Tipe Suspensi</label>
+                            <label htmlFor="tipeSuspensi" className="block mb-2 text-sm font-medium text-gray-900">Tipe
+                                Suspensi</label>
                             <input
                                 type="text"
                                 id="tipeSuspensi"
@@ -275,10 +251,11 @@ const MobilForm = () => {
                     </>
                 )}
                 {/* Input fields untuk Ford */}
-                {mobil.merk === 'ford' && (
+                {mobil.merk === 'ford' || mobil.merk === 'Ford' && (
                     <>
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label htmlFor="tipeMesin" className="block mb-2 text-sm font-medium text-gray-900">Tipe Mesin</label>
+                            <label htmlFor="tipeMesin" className="block mb-2 text-sm font-medium text-gray-900">Tipe
+                                Mesin</label>
                             <input
                                 type="text"
                                 id="tipeMesin"
@@ -291,7 +268,9 @@ const MobilForm = () => {
                             />
                         </div>
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label htmlFor="kapasitasTangkiBahanBakar" className="block mb-2 text-sm font-medium text-gray-900">Kapasitas Tangki Bahan Bakar</label>
+                            <label htmlFor="kapasitasTangkiBahanBakar"
+                                   className="block mb-2 text-sm font-medium text-gray-900">Kapasitas Tangki Bahan
+                                Bakar</label>
                             <input
                                 type="number"
                                 id="kapasitasTangkiBahanBakar"
@@ -307,9 +286,12 @@ const MobilForm = () => {
                 )}
             </div>
 
-            <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Tambah Mobil</button>
+            <button type="submit"
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
+                Edit Mobil
+            </button>
         </form>
     );
 };
 
-export default MobilForm;
+export default EditMobilForm;

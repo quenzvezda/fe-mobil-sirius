@@ -4,6 +4,7 @@ import MobilPage from './pages/MobilPage';
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import MobilForm from "./pages/MobilForm.jsx";
+import MobilFormEdit from "./pages/MobilFormEdit.jsx";
 
 function App() {
     return (
@@ -14,6 +15,7 @@ function App() {
                     <Route path="/" element={<Navigate replace to="/mobil" />} />
                     <Route path="/mobil" element={<MobilPage />} />
                     <Route path="/mobil/new" element={<MobilForm />} />
+                    <Route path="/mobil/:mobilId/edit" element={<MobilFormEdit />} />
                     {/* Tambahkan Route lainnya sesuai kebutuhan */}
                 </Routes>
                 <Footer />

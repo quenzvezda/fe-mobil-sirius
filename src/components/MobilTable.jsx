@@ -1,9 +1,14 @@
 // src/components/MobilTable.jsx
 import React, { useState, useEffect } from 'react';
 import axios from '../axios.js';
+import ActionButtons from "./ActionButtons.jsx";
 
 const MobilTable = () => {
     const [mobils, setMobils] = useState([]);
+
+    const handleDeleteMobil = (mobilId) => {
+        setMobils(mobils.filter(mobil => mobil.mobilId !== mobilId));
+    };
 
     useEffect(() => {
         const fetchMobils = async () => {
@@ -42,6 +47,9 @@ const MobilTable = () => {
                 </th>
                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                     Fitur
+                </th>
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    Aksi
                 </th>
             </tr>
             </thead>
@@ -94,7 +102,9 @@ const MobilTable = () => {
                             )}
                         </ul>
                     </td>
-
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        <ActionButtons mobilId={mobil.mobilId} onDelete={handleDeleteMobil} />
+                    </td>
                 </tr>
             ))}
             </tbody>
