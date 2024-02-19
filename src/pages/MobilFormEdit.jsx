@@ -18,6 +18,7 @@ const EditMobilForm = () => {
         tipeSuspensi: '', // untuk Porche
         tipeMesin: '', // untuk Ford
         kapasitasTangkiBahanBakar: '', // untuk Ford
+        roda: [],
     });
     const { mobilId } = useParams();
     const navigate = useNavigate();
@@ -38,6 +39,12 @@ const EditMobilForm = () => {
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setMobil({ ...mobil, [name]: value });
+    };
+
+    const handleRodaChange = (index, value) => {
+        const updatedRoda = [...mobil.roda];
+        updatedRoda[index].kondisi = value;
+        setMobil({ ...mobil, roda: updatedRoda });
     };
 
     const handleSubmit = async (event) => {
@@ -285,6 +292,29 @@ const EditMobilForm = () => {
                     </>
                 )}
             </div>
+
+            {/* Input fields untuk Roda */}
+            {mobil.roda.map((roda, index) => (
+                <div key={index} className="flex flex-wrap -mx-3 mb-6">
+                    <div className="w-full px-3">
+                        <label htmlFor={`roda-${index}`} className="block mb-2 text-sm font-medium text-gray-900">
+                            Kondisi Roda {index + 1}
+                        </label>
+                        <input
+                            type="number"
+                            id={`roda-${index}`}
+                            name={`roda-${index}`}
+                            value={roda.kondisi}
+                            onChange={(e) => handleRodaChange(index, e.target.value)}
+                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                            required
+                            min="1"
+                            max="100"
+                            placeholder="1-100%"
+                        />
+                    </div>
+                </div>
+            ))}
 
             <button type="submit"
                     className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
