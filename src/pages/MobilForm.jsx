@@ -18,6 +18,7 @@ const MobilForm = () => {
         tipeSuspensi: '', // untuk Porche
         tipeMesin: '', // untuk Ford
         kapasitasTangkiBahanBakar: '', // untuk Ford
+        jumlahRoda: '',
     });
 
     const handleInputChange = (event) => {
@@ -70,6 +71,7 @@ const MobilForm = () => {
             tipeSuspensi: mobil.tipeSuspensi,
             tipeMesin: mobil.tipeMesin,
             kapasitasTangkiBahanBakar: mobil.kapasitasTangkiBahanBakar,
+            jumlahRoda: mobil.jumlahRoda,
         };
 
         try {
@@ -184,7 +186,8 @@ const MobilForm = () => {
                 {mobil.jenisMobil === 'sedan' && (
                     <>
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label htmlFor="panjangBodi" className="block mb-2 text-sm font-medium text-gray-900">Panjang Bodi</label>
+                            <label htmlFor="panjangBodi" className="block mb-2 text-sm font-medium text-gray-900">Panjang
+                                Bodi</label>
                             <input
                                 type="number"
                                 id="panjangBodi"
@@ -197,7 +200,8 @@ const MobilForm = () => {
                             />
                         </div>
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label htmlFor="tipeAtap" className="block mb-2 text-sm font-medium text-gray-900">Tipe Atap</label>
+                            <label htmlFor="tipeAtap" className="block mb-2 text-sm font-medium text-gray-900">Tipe
+                                Atap</label>
                             <input
                                 type="text"
                                 id="tipeAtap"
@@ -215,7 +219,8 @@ const MobilForm = () => {
                 {mobil.jenisMobil === 'suv' && (
                     <>
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label htmlFor="kapasitasPenumpang" className="block mb-2 text-sm font-medium text-gray-900">Kapasitas Penumpang</label>
+                            <label htmlFor="kapasitasPenumpang"
+                                   className="block mb-2 text-sm font-medium text-gray-900">Kapasitas Penumpang</label>
                             <input
                                 type="number"
                                 id="kapasitasPenumpang"
@@ -228,7 +233,8 @@ const MobilForm = () => {
                             />
                         </div>
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label htmlFor="groundClearance" className="block mb-2 text-sm font-medium text-gray-900">Ground Clearance</label>
+                            <label htmlFor="groundClearance" className="block mb-2 text-sm font-medium text-gray-900">Ground
+                                Clearance</label>
                             <input
                                 type="number"
                                 id="groundClearance"
@@ -247,7 +253,8 @@ const MobilForm = () => {
                 {mobil.merk === 'porche' && (
                     <>
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label htmlFor="kecepatanMaksimal" className="block mb-2 text-sm font-medium text-gray-900">Kecepatan Maksimal</label>
+                            <label htmlFor="kecepatanMaksimal" className="block mb-2 text-sm font-medium text-gray-900">Kecepatan
+                                Maksimal</label>
                             <input
                                 type="number"
                                 id="kecepatanMaksimal"
@@ -260,7 +267,8 @@ const MobilForm = () => {
                             />
                         </div>
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label htmlFor="tipeSuspensi" className="block mb-2 text-sm font-medium text-gray-900">Tipe Suspensi</label>
+                            <label htmlFor="tipeSuspensi" className="block mb-2 text-sm font-medium text-gray-900">Tipe
+                                Suspensi</label>
                             <input
                                 type="text"
                                 id="tipeSuspensi"
@@ -278,7 +286,8 @@ const MobilForm = () => {
                 {mobil.merk === 'ford' && (
                     <>
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label htmlFor="tipeMesin" className="block mb-2 text-sm font-medium text-gray-900">Tipe Mesin</label>
+                            <label htmlFor="tipeMesin" className="block mb-2 text-sm font-medium text-gray-900">Tipe
+                                Mesin</label>
                             <input
                                 type="text"
                                 id="tipeMesin"
@@ -291,7 +300,9 @@ const MobilForm = () => {
                             />
                         </div>
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label htmlFor="kapasitasTangkiBahanBakar" className="block mb-2 text-sm font-medium text-gray-900">Kapasitas Tangki Bahan Bakar</label>
+                            <label htmlFor="kapasitasTangkiBahanBakar"
+                                   className="block mb-2 text-sm font-medium text-gray-900">Kapasitas Tangki Bahan
+                                Bakar</label>
                             <input
                                 type="number"
                                 id="kapasitasTangkiBahanBakar"
@@ -305,9 +316,34 @@ const MobilForm = () => {
                         </div>
                     </>
                 )}
+
+                <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                    <label htmlFor="jumlahRoda" className="block mb-2 text-sm font-medium text-gray-900">Jumlah
+                        Roda</label>
+                    <select
+                        id="jumlahRoda"
+                        name="jumlahRoda"
+                        value={mobil.jumlahRoda}
+                        onChange={handleInputChange}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        required
+                        defaultValue={4}
+                    >
+                        <option value="">Pilih Jumlah Roda</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                    </select>
+                </div>
             </div>
 
-            <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Tambah Mobil</button>
+
+            <button type="submit"
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Tambah
+                Mobil
+            </button>
         </form>
     );
 };

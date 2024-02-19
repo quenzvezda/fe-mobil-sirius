@@ -49,6 +49,9 @@ const MobilTable = () => {
                     Fitur
                 </th>
                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                    Roda
+                </th>
+                <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                     Aksi
                 </th>
             </tr>
@@ -100,6 +103,13 @@ const MobilTable = () => {
                             {mobil.kapasitasTangkiBahanBakar && (
                                 <li>Kapasitas Tangki Bahan Bakar: {mobil.kapasitasTangkiBahanBakar} liter</li>
                             )}
+                        </ul>
+                    </td>
+                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        <ul>
+                            {mobil.roda.map((roda) => (
+                                <li key={roda.id}>Kondisi: {roda.kondisi}%</li>
+                            ))}
                         </ul>
                     </td>
                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
